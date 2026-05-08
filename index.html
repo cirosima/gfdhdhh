@@ -132,10 +132,11 @@
         #login-page {
             min-height: 100vh;
             display: flex; align-items: center; justify-content: center;
+            flex-direction: column;
             background: var(--navy);
-            padding: 24px;
+            padding: 32px 24px;
             position: relative;
-            overflow: hidden;
+            overflow-y: auto;
         }
         #login-page::before {
             content: '';
@@ -322,6 +323,7 @@
             border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 4px 12px rgba(201,168,76,0.3);
+            flex-shrink: 0;
         }
         .header-brand-icon i { color: var(--navy); font-size: 1rem; }
         .header-brand-text { border-left: 1px solid rgba(255,255,255,0.1); padding-left: 14px; }
@@ -333,7 +335,7 @@
         .header-brand-text .bank-name span { color: var(--gold); }
         .header-brand-text .title { color: rgba(255,255,255,0.55); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; margin-top: 2px; }
 
-        .header-actions { display: flex; align-items: center; gap: 8px; }
+        .header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 
         .header-icon-btn {
             position: relative;
@@ -643,10 +645,12 @@
             transition: background 0.15s;
             cursor: pointer;
             border-bottom: 1px solid var(--gray-100);
+            gap: 12px; overflow: hidden;
         }
         .txn-row:last-child { border-bottom: none; }
         .txn-row:hover { background: var(--gray-50); }
-        .txn-left { display: flex; align-items: center; gap: 13px; }
+        .txn-left { display: flex; align-items: center; gap: 13px; min-width: 0; flex: 1; }
+        .txn-left > div { min-width: 0; }
         .txn-icon {
             width: 38px; height: 38px;
             border-radius: 10px;
@@ -657,9 +661,9 @@
         .txn-icon.income i { color: var(--green); font-size: 0.875rem; }
         .txn-icon.expense { background: var(--red-light); }
         .txn-icon.expense i { color: var(--red); font-size: 0.875rem; }
-        .txn-desc { font-size: 0.9rem; font-weight: 500; color: var(--gray-800); }
+        .txn-desc { font-size: 0.9rem; font-weight: 500; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .txn-meta { font-size: 0.75rem; color: var(--gray-400); margin-top: 2px; }
-        .txn-right { text-align: right; }
+        .txn-right { text-align: right; flex-shrink: 0; }
         .txn-amount {
             font-family: var(--font-mono);
             font-size: 0.9375rem; font-weight: 600;
@@ -925,59 +929,121 @@
         }
         .toast-close:hover { color: #dc2626; }
 
-        /* ===================== SITE FOOTER ===================== */
-        .site-footer {
-            background: var(--navy);
-            border-top: 1px solid rgba(255,255,255,0.06);
-            padding: 28px 24px;
-            margin-top: 16px;
-        }
-        .site-footer-inner {
-            max-width: 1280px; margin: 0 auto;
-            display: flex; align-items: center; justify-content: space-between;
-            flex-wrap: wrap; gap: 16px;
-        }
-        .site-footer-brand {
-            display: flex; align-items: center; gap: 9px;
-        }
-        .site-footer-icon {
-            width: 28px; height: 28px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            border-radius: 7px;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .site-footer-icon i { color: var(--navy); font-size: 0.7rem; }
-        .site-footer-name {
-            font-family: var(--font-display);
-            font-size: 0.9375rem; font-weight: 700; color: var(--white);
-        }
-        .site-footer-name span { color: var(--gold); }
-        .site-footer-copy {
-            font-size: 0.75rem; color: rgba(255,255,255,0.25); line-height: 1.7; text-align: center;
-        }
-        .site-footer-copy a { color: rgba(201,168,76,0.4); text-decoration: none; }
-        .site-footer-links {
-            display: flex; gap: 16px; flex-wrap: wrap; justify-content: flex-end;
-        }
-        .site-footer-links a {
-            font-size: 0.75rem; color: rgba(255,255,255,0.2);
-            text-decoration: none; transition: color 0.15s;
-        }
-        .site-footer-links a:hover { color: rgba(255,255,255,0.5); }
-
         /* SCROLL */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 99px; }
 
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            .welcome-inner { flex-direction: column; }
+        /* ===================== RESPONSIVE — MOBILE FIRST ===================== */
+
+        /* --- Toast: full width on small screens --- */
+        @media (max-width: 480px) {
+            #toast-container { width: calc(100% - 32px); left: 16px; transform: none; }
+            .toast { min-width: 0; width: 100%; }
+        }
+
+        /* --- Login page --- */
+        @media (max-width: 480px) {
+            #login-page { padding: 16px; align-items: flex-start; padding-top: 32px; }
+            .login-card { padding: 28px 20px; border-radius: var(--radius-lg); }
+            .login-bank-label { font-size: 1.125rem; }
+            .login-title { font-size: 1.375rem; }
+            .login-badges { gap: 12px; }
+            .login-footer-links { gap: 12px; flex-wrap: wrap; justify-content: center; }
+        }
+
+        /* --- Header --- */
+        @media (max-width: 640px) {
+            .header-inner { padding: 0 16px; height: 60px; }
+            .header-brand-text .bank-name { font-size: 0.9375rem; }
+            .header-brand-text .title { display: none; }
             .header-user-info { display: none; }
-            .main-content { padding: 20px 16px; }
-            .welcome-banner { padding: 24px 20px; }
-            .statement-stats { grid-template-columns: 1fr; }
-            .login-card { padding: 36px 24px; }
+            .header-user-btn { padding: 6px 8px; gap: 6px; }
+        }
+
+        /* --- Main content padding --- */
+        @media (max-width: 640px) {
+            .main-content { padding: 16px; }
+        }
+
+        /* --- Welcome banner --- */
+        @media (max-width: 768px) {
+            .welcome-banner { padding: 22px 20px; }
+            .welcome-inner { flex-direction: column; gap: 16px; align-items: flex-start; }
+            .welcome-text .greeting { font-size: 1.375rem; }
+            .welcome-actions { width: 100%; }
+            .welcome-actions .btn { flex: 1; justify-content: center; font-size: 0.8125rem; padding: 10px 14px; }
+            .welcome-meta { gap: 12px; }
+        }
+        @media (max-width: 400px) {
+            .welcome-text .greeting { font-size: 1.2rem; }
+            .welcome-actions { flex-direction: column; }
+            .welcome-actions .btn { width: 100%; }
+        }
+
+        /* --- Cards grid: 1 col on mobile, 2 col on tablet --- */
+        @media (max-width: 640px) {
+            .cards-grid { grid-template-columns: 1fr; gap: 14px; }
+            .balance-amount { font-size: 1.625rem; }
+            .quick-actions-row { grid-template-columns: repeat(3, 1fr); }
+            .actions-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .action-tile { padding: 14px 8px; }
+        }
+        @media (min-width: 641px) and (max-width: 1023px) {
+            .cards-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* --- Section cards / transactions --- */
+        @media (max-width: 640px) {
+            .section-header { padding: 16px 16px 14px; flex-wrap: wrap; gap: 8px; }
+            .txn-row { padding: 12px 16px; gap: 10px; }
+            .txn-icon { width: 34px; height: 34px; border-radius: 9px; }
+            .txn-desc { font-size: 0.8375rem; }
+            .txn-meta { font-size: 0.7rem; }
+            .txn-amount { font-size: 0.875rem; }
+            .account-row { padding: 14px 16px; }
+            .account-icon { width: 36px; height: 36px; border-radius: 9px; }
+            .account-name { font-size: 0.875rem; }
+            .summary-header { padding: 16px; flex-wrap: wrap; gap: 8px; }
+            .total-amount { font-size: 1.375rem; }
+        }
+
+        /* --- Modals: full screen on mobile --- */
+        @media (max-width: 540px) {
+            .modal { align-items: flex-end; padding: 0; }
+            .modal-content {
+                max-width: 100%;
+                width: 100%;
+                border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+                max-height: 92vh;
+                overflow-y: auto;
+                transform: translateY(100%);
+            }
+            .modal.active .modal-content { transform: translateY(0); }
+            .modal-header { padding: 20px 20px 0; }
+            .modal-body { padding: 20px; }
+            .statement-modal .modal-content {
+                max-width: 100%; max-height: 92vh;
+                border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            }
+            .statement-stats { grid-template-columns: 1fr; gap: 10px; padding: 16px; }
+            .statement-narrative { margin: 0 16px 16px; }
+            .statement-table-wrap { padding: 0 16px 16px; }
+            .statement-summary { margin: 0 16px 16px; }
+            .statement-footer { padding: 14px 16px; }
+            .statement-banner { padding: 22px 20px; }
+            .statement-banner-inner { flex-direction: column; gap: 10px; }
+            .statement-date-info { text-align: left; }
+        }
+
+        /* --- Dropdowns: full width on mobile --- */
+        @media (max-width: 480px) {
+            .dropdown { min-width: calc(100vw - 32px) !important; right: -8px; }
+        }
+
+        /* --- Card body padding on mobile --- */
+        @media (max-width: 480px) {
+            .card-body { padding: 18px 16px; }
         }
 
         /* DROPDOWN WRAPPER */
@@ -1287,26 +1353,6 @@
             </div>
 
         </main>
-
-        <!-- Site Footer -->
-        <footer class="site-footer">
-            <div class="site-footer-inner">
-                <div class="site-footer-brand">
-                    <div class="site-footer-icon"><i class="fas fa-landmark"></i></div>
-                    <span class="site-footer-name">Prame<span>Trust</span></span>
-                </div>
-                <div class="site-footer-copy">
-                    <p>@prametrust &nbsp;·&nbsp; @prametrust.agri &nbsp;·&nbsp; @support.prametrust</p>
-                    <p>© 2025 PrameTrust Bank, N.A. All rights reserved. Member FDIC. Equal Housing Lender.</p>
-                </div>
-                <div class="site-footer-links">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="#">Security</a>
-                    <a href="#">Contact</a>
-                </div>
-            </div>
-        </footer>
 
     </div>
 
